@@ -1,0 +1,249 @@
+---
+Organizations:
+    - &Orderer
+        Name: Orderer
+        ID: OrdererMSP
+        MSPDir: crypto-config/ordererOrganizations/trackandtrace.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('OrdererMSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('OrdererMSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('OrdererMSP.admin')"
+        OrdererEndpoints:
+            - orderer.example.com:7050        
+
+    - &Consignor
+        Name: ConsignorMSP
+        ID: ConsignorMSP
+        MSPDir: crypto-config/peerOrganizations/consignor.trackandtrace.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('ConsignorMSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('ConsignorMSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('ConsignorMSP.admin')"
+        AnchorPeers:
+            - Host: peer0.consignor.trackandtrace.com
+              Port: 7051
+    - &Consignee
+        Name: ConsigneeMSP
+        ID: ConsigneeMSP
+        MSPDir: crypto-config/peerOrganizations/consignee.trackandtrace.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('ConsigneeMSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('ConsigneeMSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('ConsigneeMSP.admin')"
+        AnchorPeers:
+            - Host: peer0.consignee.trackandtrace.com
+              Port: 7051
+
+    - &PreCarriageShipper
+        Name: PreCarriageShipperMSP
+        ID: PreCarriageShipperMSP
+        MSPDir: crypto-config/peerOrganizations/precarriageshipper.trackandtrace.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('PreCarriageShipperMSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('PreCarriageShipperMSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('PreCarriageShipperMSP.admin')"
+        AnchorPeers:
+            - Host: peer0.precarriageshipper.trackandtrace.com
+              Port: 7051
+
+    - &MainCarrier
+        Name: MainCarrierMSP
+        ID: MainCarrierMSP
+        MSPDir: crypto-config/peerOrganizations/maincarrier.trackandtrace.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('MainCarrierMSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('MainCarrierMSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('MainCarrierMSP.admin')"
+        AnchorPeers:
+            - Host: peer0.maincarrier.trackandtrace.com
+              Port: 7051
+
+    - &OnCarriageShipper
+        Name: OnCarriageShipperMSP
+        ID: OnCarriageShipperMSP
+        MSPDir: crypto-config/peerOrganizations/oncarriageshipper.trackandtrace.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('OnCarriageShipperMSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('OnCarriageShipperMSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('OnCarriageShipperMSP.admin')"
+        AnchorPeers:
+            - Host: peer0.oncarriageshipper.trackandtrace.com
+              Port: 7051
+
+    - &Customs
+        Name: CustomsMSP
+        ID: CustomsMSP
+        MSPDir: crypto-config/peerOrganizations/customs.trackandtrace.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('CustomsMSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('CustomsMSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('CustomsMSP.admin')"
+        AnchorPeers:
+            - Host: peer0.customs.trackandtrace.com
+              Port: 7051
+
+Capabilities:
+    Channel: &ChannelCapabilities
+        V2_0: true
+    Orderer: &OrdererCapabilities
+        V2_0: true
+    Application: &ApplicationCapabilities
+        V2_0: true
+
+Application: &ApplicationDefaults
+    Organizations:
+        - *Consignor
+        - *Consignee
+        - *PreCarriageShipper
+        - *MainCarrier
+        - *OnCarriageShipper
+        - *Customs
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+    Capabilities:
+        <<: *ApplicationCapabilities
+
+Orderer: &OrdererDefaults
+    OrdererType: etcdraft
+    EtcdRaft:
+        Consenters:
+            - Host: orderer.trackandtrace.com
+              Port: 7050
+              ClientTLSCert: crypto-config/ordererOrganizations/trackandtrace.com/orderers/orderer.trackandtrace.com/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/trackandtrace.com/orderers/orderer.trackandtrace.com/tls/server.crt
+    Addresses:
+        - orderer.trackandtrace.com:7050
+    Organizations:
+        - *Orderer
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        BlockValidation:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+    Capabilities:
+        <<: *OrdererCapabilities
+
+Channel: &ChannelDefaults
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+    Capabilities:
+        <<: *ChannelCapabilities
+
+Profiles:
+    SampleMultiNodeEtcdRaft:
+        <<: *ChannelDefaults
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *Orderer
+            Capabilities:
+                <<: *OrdererCapabilities
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Consignor
+                - *Consignee
+                - *PreCarriageShipper
+                - *MainCarrier
+                - *OnCarriageShipper
+                - *Customs
+            Capabilities:
+                <<: *ApplicationCapabilities
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                    - *Consignor
+                    - *Consignee
+                    - *PreCarriageShipper
+                    - *MainCarrier
+                    - *OnCarriageShipper
+                    - *Customs
+
+    Frachtverfolgung:
+        Consortium: SampleConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Consignor
+                - *Consignee
+                - *PreCarriageShipper
+                - *MainCarrier
+                - *OnCarriageShipper
+                - *Customs
+        Policies:
+            Readers:
+                Type: ImplicitMeta
+                Rule: "ANY Readers"
+            Writers:
+                Type: ImplicitMeta
+                Rule: "ANY Writers"
+            Admins:
+                Type: ImplicitMeta
+                Rule: "MAJORITY Admins"        
+

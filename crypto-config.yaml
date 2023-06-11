@@ -1,0 +1,42 @@
+OrdererOrgs:
+  - Name: Orderer
+    Domain: trackandtrace.com
+    Specs:
+      - Hostname: orderer
+PeerOrgs:
+  - Name: Consignor
+    Domain: consignor.trackandtrace.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+  - Name: Consignee
+    Domain: consignee.trackandtrace.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+  - Name: PreCarriageShipper
+    Domain: precarriageshipper.trackandtrace.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+  - Name: MainCarrier
+    Domain: maincarrier.trackandtrace.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+  - Name: OnCarriageShipper
+    Domain: oncarriageshipper.trackandtrace.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+  - Name: Customs
+    Domain: customs.trackandtrace.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
