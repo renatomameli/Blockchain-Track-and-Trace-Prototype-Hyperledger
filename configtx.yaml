@@ -50,7 +50,7 @@ Organizations:
                 Rule: "OR('ConsigneeMSP.admin')"
         AnchorPeers:
             - Host: peer0.consignee.trackandtrace.com
-              Port: 7052
+              Port: 7057
 
     - &PreCarriageShipper
         Name: PreCarriageShipperMSP
