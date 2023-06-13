@@ -50,7 +50,7 @@ Organizations:
                 Rule: "OR('ConsigneeMSP.admin')"
         AnchorPeers:
             - Host: peer0.consignee.trackandtrace.com
-              Port: 7051
+              Port: 7052
 
     - &PreCarriageShipper
         Name: PreCarriageShipperMSP
@@ -68,7 +68,7 @@ Organizations:
                 Rule: "OR('PreCarriageShipperMSP.admin')"
         AnchorPeers:
             - Host: peer0.precarriageshipper.trackandtrace.com
-              Port: 7051
+              Port: 7053
 
     - &MainCarrier
         Name: MainCarrierMSP
@@ -86,7 +86,7 @@ Organizations:
                 Rule: "OR('MainCarrierMSP.admin')"
         AnchorPeers:
             - Host: peer0.maincarrier.trackandtrace.com
-              Port: 7051
+              Port: 7054
 
     - &OnCarriageShipper
         Name: OnCarriageShipperMSP
@@ -104,7 +104,7 @@ Organizations:
                 Rule: "OR('OnCarriageShipperMSP.admin')"
         AnchorPeers:
             - Host: peer0.oncarriageshipper.trackandtrace.com
-              Port: 7051
+              Port: 7055
 
     - &Customs
         Name: CustomsMSP
@@ -122,7 +122,7 @@ Organizations:
                 Rule: "OR('CustomsMSP.admin')"
         AnchorPeers:
             - Host: peer0.customs.trackandtrace.com
-              Port: 7051
+              Port: 7056
 
 Capabilities:
     Channel: &ChannelCapabilities
