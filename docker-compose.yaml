@@ -34,12 +34,14 @@ services:
       - CORE_PEER_ADDRESS=peer0.consignor.trackandtrace.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.consignor.trackandtrace.com:7051
       - CORE_PEER_LOCALMSPID=ConsignorMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/crypto-config/peerOrganizations/consignor.trackandtrace.com/users/Admin@consignor.trackandtrace.com/msp
     volumes:
         - /var/run/:/host/var/run/
         - ./crypto-config/peerOrganizations/consignor.trackandtrace.com/peers/peer0.consignor.trackandtrace.com/msp:/etc/hyperledger/fabric/msp
         - ./crypto-config/peerOrganizations/consignor.trackandtrace.com/peers/peer0.consignor.trackandtrace.com/tls:/etc/hyperledger/fabric/tls
         - ./channel-artifacts:/etc/hyperledger/fabric/channel-artifacts
         - ./crypto-config/ordererOrganizations/trackandtrace.com/orderers/orderer.trackandtrace.com/msp/tlscacerts:/etc/hyperledger/fabric/orderer
+        - ./crypto-config/peerOrganizations/consignor.trackandtrace.com/users/Admin@consignor.trackandtrace.com/msp:/etc/hyperledger/fabric/crypto-config/peerOrganizations/consignor.trackandtrace.com/users/Admin@consignor.trackandtrace.com/msp
     ports:
       - 7051:7051
 
