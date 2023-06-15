@@ -1,0 +1,4 @@
+name: "mychaincode"
+version: "1.0"
+path: "./src/main/java/org/trackandtrace"
+type: "java"
