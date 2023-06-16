@@ -2,6 +2,7 @@
 export FABRIC_CFG_PATH=/Users/renato.mameli/Hyperledger/trackandtrace
 export PATH=~/Hyperledger/fabric-samples/bin:$PATH
 
+# Step 0: Shut down running containers and delete generated configuration files
 docker compose down
 rm -r channel-artifacts
 rm -r crypto-config
@@ -45,7 +46,7 @@ docker exec -it peer0.maincarrier.trackandtrace.com peer channel join -b /tracka
 docker exec -it peer0.oncarriageshipper.trackandtrace.com peer channel join -b /trackandtracechannel.block
 docker exec -it peer0.customs.trackandtrace.com peer channel join -b /trackandtracechannel.block
 
-# Step 12 TODO: Add zip creation of java project
-# gradle build
-# zip -r code.zip ./build/libs/chaincode-1.0-SNAPSHOT.jar
-# peer chaincode install -n mychaincode -v 1.0 -p /path/to/chaincode-directory
+# Step 12
+#docker exec -it peer0.consignor.trackandtrace.com peer lifecycle chaincode package mychaincode.tar.gz --path /etc/hyperledger/fabric/chaincode/ --lang java --label mychaincode_1
+
+# docker exec -it peer0.consignor.trackandtrace.com peer lifecycle chaincode install mychaincode.tar.gz
