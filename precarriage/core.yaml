@@ -273,11 +273,11 @@ peer:
     # TLS Settings
     tls:
         # Require server-side TLS
-        enabled:  false
+        enabled:  true
         # Require client certificates / mutual TLS for inbound connections.
         # Note that clients that are not configured to use a certificate will
         # fail to connect to the peer.
-        clientAuthRequired: false
+        clientAuthRequired: true
         # X.509 certificate used for TLS server
         cert:
             file: tls/server.crt
@@ -300,11 +300,11 @@ peer:
         # Private key used for TLS when making client connections.
         # If not set, peer.tls.key.file will be used instead
         clientKey:
-            file:
+            file: users/client.key
         # X.509 certificate used for TLS when making client connections.
         # If not set, peer.tls.cert.file will be used instead
         clientCert:
-            file:
+            file: users/client.crt
 
     # Authentication contains configuration parameters related to authenticating
     # client messages

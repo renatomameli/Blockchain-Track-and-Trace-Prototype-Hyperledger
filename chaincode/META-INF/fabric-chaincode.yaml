@@ -1,0 +1,4 @@
+name: "mychaincode"
+version: "1.0"
+path: "org.trackandtrace.ShipmentContract"
+type: "java"

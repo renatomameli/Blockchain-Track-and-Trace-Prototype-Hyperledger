@@ -15,7 +15,7 @@ Organizations:
                 Type: Signature
                 Rule: "OR('OrdererMSP.admin')"
         OrdererEndpoints:
-            - orderer.example.com:7050        
+            - orderer.trackandtrace.com:7050        
 
     - &Consignor
         Name: ConsignorMSP

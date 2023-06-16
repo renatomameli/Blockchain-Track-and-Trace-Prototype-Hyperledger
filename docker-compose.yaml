@@ -35,14 +35,18 @@ services:
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.consignor.trackandtrace.com:7051
       - CORE_PEER_LOCALMSPID=ConsignorMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/crypto-config/peerOrganizations/consignor.trackandtrace.com/users/Admin@consignor.trackandtrace.com/msp
+      - CORE_PEER_CHAINCODE_EXECUTETIMEOUT=300s
     volumes:
         - /var/run/:/host/var/run/
         - ./crypto-config/peerOrganizations/consignor.trackandtrace.com/peers/peer0.consignor.trackandtrace.com/msp:/etc/hyperledger/fabric/msp
-        - ./crypto-config/peerOrganizations/consignor.trackandtrace.com/peers/peer0.consignor.trackandtrace.com/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/consignor.trackandtrace.com/peers/peer0.consignor.trackandtrace.com/tls/:/etc/hyperledger/fabric/tls
         - ./channel-artifacts:/etc/hyperledger/fabric/channel-artifacts
         - ./crypto-config/ordererOrganizations/trackandtrace.com/orderers/orderer.trackandtrace.com/msp/tlscacerts:/etc/hyperledger/fabric/orderer
         - ./crypto-config/peerOrganizations/consignor.trackandtrace.com/users/Admin@consignor.trackandtrace.com/msp:/etc/hyperledger/fabric/crypto-config/peerOrganizations/consignor.trackandtrace.com/users/Admin@consignor.trackandtrace.com/msp
         - ./consignor:/var/hyperledger/fabric/config
+        - ./crypto-config/peerOrganizations/consignor.trackandtrace.com/peers/peer0.consignor.trackandtrace.com/tls:/var/hyperledger/fabric/config/tls
+        - ./crypto-config/peerOrganizations/consignor.trackandtrace.com/users/Admin@consignor.trackandtrace.com/tls:/var/hyperledger/fabric/config/users
+        - ./chaincode/src/main/java/org/trackandtrace:/etc/hyperledger/fabric/chaincode
     ports:
       - 7051:7051
 
@@ -65,6 +69,9 @@ services:
       - ./crypto-config/ordererOrganizations/trackandtrace.com/orderers/orderer.trackandtrace.com/msp/tlscacerts:/etc/hyperledger/fabric/orderer
       - ./crypto-config/peerOrganizations/consignee.trackandtrace.com/users/Admin@consignee.trackandtrace.com/msp:/etc/hyperledger/fabric/crypto-config/peerOrganizations/consignee.trackandtrace.com/users/Admin@consignee.trackandtrace.com/msp
       - ./consignee:/var/hyperledger/fabric/config
+      - ./crypto-config/peerOrganizations/consignee.trackandtrace.com/peers/peer0.consignee.trackandtrace.com/tls:/var/hyperledger/fabric/config/tls
+      - ./crypto-config/peerOrganizations/consignee.trackandtrace.com/users/Admin@consignee.trackandtrace.com/tls:/var/hyperledger/fabric/config/users
+      
     ports:
       - 7057:7057
 
@@ -87,6 +94,8 @@ services:
       - ./crypto-config/ordererOrganizations/trackandtrace.com/orderers/orderer.trackandtrace.com/msp/tlscacerts:/etc/hyperledger/fabric/orderer
       - ./crypto-config/peerOrganizations/precarriageshipper.trackandtrace.com/users/Admin@precarriageshipper.trackandtrace.com/msp:/etc/hyperledger/fabric/crypto-config/peerOrganizations/precarriageshipper.trackandtrace.com/users/Admin@precarriageshipper.trackandtrace.com/msp
       - ./precarriage:/var/hyperledger/fabric/config
+      - ./crypto-config/peerOrganizations/precarriageshipper.trackandtrace.com/peers/peer0.precarriageshipper.trackandtrace.com/tls:/var/hyperledger/fabric/config/tls
+      - ./crypto-config/peerOrganizations/precarriageshipper.trackandtrace.com/users/Admin@precarriageshipper.trackandtrace.com/tls:/var/hyperledger/fabric/config/users
     ports:
       - 7053:7053
 
@@ -109,6 +118,8 @@ services:
       - ./crypto-config/ordererOrganizations/trackandtrace.com/orderers/orderer.trackandtrace.com/msp/tlscacerts:/etc/hyperledger/fabric/orderer
       - ./crypto-config/peerOrganizations/maincarrier.trackandtrace.com/users/Admin@maincarrier.trackandtrace.com/msp:/etc/hyperledger/fabric/crypto-config/peerOrganizations/maincarrier.trackandtrace.com/users/Admin@maincarrier.trackandtrace.com/msp
       - ./maincarrier:/var/hyperledger/fabric/config
+      - ./crypto-config/peerOrganizations/maincarrier.trackandtrace.com/peers/peer0.maincarrier.trackandtrace.com/tls:/var/hyperledger/fabric/config/tls
+      - ./crypto-config/peerOrganizations/maincarrier.trackandtrace.com/users/Admin@maincarrier.trackandtrace.com/tls:/var/hyperledger/fabric/config/users
     ports:
       - 7054:7054
 
@@ -131,6 +142,8 @@ services:
       - ./crypto-config/ordererOrganizations/trackandtrace.com/orderers/orderer.trackandtrace.com/msp/tlscacerts:/etc/hyperledger/fabric/orderer
       - ./crypto-config/peerOrganizations/oncarriageshipper.trackandtrace.com/users/Admin@oncarriageshipper.trackandtrace.com/msp:/etc/hyperledger/fabric/crypto-config/peerOrganizations/oncarriageshipper.trackandtrace.com/users/Admin@oncarriageshipper.trackandtrace.com/msp
       - ./oncarriage:/var/hyperledger/fabric/config
+      - ./crypto-config/peerOrganizations/oncarriageshipper.trackandtrace.com/peers/peer0.oncarriageshipper.trackandtrace.com/tls/:/var/hyperledger/fabric/config/tls
+      - ./crypto-config/peerOrganizations/oncarriageshipper.trackandtrace.com/users/Admin@oncarriageshipper.trackandtrace.com/tls:/var/hyperledger/fabric/config/users
     ports:
       - 7055:7055
 
@@ -153,6 +166,8 @@ services:
       - ./crypto-config/ordererOrganizations/trackandtrace.com/orderers/orderer.trackandtrace.com/msp/tlscacerts:/etc/hyperledger/fabric/orderer
       - ./crypto-config/peerOrganizations/customs.trackandtrace.com/users/Admin@customs.trackandtrace.com/msp:/etc/hyperledger/fabric/crypto-config/peerOrganizations/customs.trackandtrace.com/users/Admin@customs.trackandtrace.com/msp
       - ./customs:/var/hyperledger/fabric/config
+      - ./crypto-config/peerOrganizations/customs.trackandtrace.com/peers/peer0.customs.trackandtrace.com/tls:/var/hyperledger/fabric/config/tls
+      - ./crypto-config/peerOrganizations/customs.trackandtrace.com/users/Admin@customs.trackandtrace.com/tls:/var/hyperledger/fabric/config/users
     ports:
       - 7056:7056
 
