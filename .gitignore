@@ -7,9 +7,13 @@ out/
 *.ipr
 *.iws
 trackandtracechannel.block
-channel-artifacts
-crypto-config
-system-genesis-block
+channel-artifacts/
+crypto-config/
+system-genesis-block/
+
+/channel-artifacts
+/crypto-config
+/system-genesis-block
 
 
 # Gradle build directory
