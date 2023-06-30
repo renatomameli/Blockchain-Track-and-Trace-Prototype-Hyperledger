@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,7 +15,10 @@ public class Shipment {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     private String shipmentId;
-    private Status status;
+    private StatusWithTimestamp status;
+    private String coordinates;
+    private String object;
+    private Date eta;
 
     public String toJSON() {
         try {

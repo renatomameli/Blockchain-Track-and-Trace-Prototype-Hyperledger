@@ -11,23 +11,29 @@ import org.hyperledger.fabric.shim.ChaincodeException;
 import org.hyperledger.fabric.shim.ChaincodeStub;
 import org.trackandtrace.model.Shipment;
 import org.trackandtrace.model.Status;
+import org.trackandtrace.model.StatusWithTimestamp;
 
-import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.UUID;
 
 @Contract(name = "ShipmentContract")
 @Default
 public class ShipmentContract implements ContractInterface {
 
     @Transaction(intent = Transaction.TYPE.SUBMIT)
-    public void createShipment(Context ctx, String shipmentId, Status status) {
+    public void createShipment(Context ctx, String object, Date eta) {
+        String generatedId = UUID.randomUUID().toString();
         Shipment shipment = new Shipment();
-        shipment.setShipmentId(shipmentId);
-        shipment.setStatus(status);
-        ctx.getStub().putStringState(shipmentId, shipment.toJSON());
+        shipment.setObject(object);
+        shipment.setEta(eta);
+        shipment.setShipmentId(generatedId);
+        shipment.setStatus(new StatusWithTimestamp(Status.CREATED, LocalDateTime.now()));
+        ctx.getStub().putStringState(generatedId, shipment.toJSON());
     }
 
     @Transaction(intent = Transaction.TYPE.SUBMIT)
-    public void UpdateShipment(final Context ctx, String shipmentId, Status status) throws UnsupportedEncodingException, JsonProcessingException {
+    public void updateShipment(final Context ctx, String shipmentId, Status status, String coordinates) throws JsonProcessingException {
         ChaincodeStub stub = ctx.getStub();
 
         String shipmentState = stub.getStringState(shipmentId);
@@ -40,7 +46,10 @@ public class ShipmentContract implements ContractInterface {
 
         ObjectMapper objectMapper = new ObjectMapper();
         Shipment shipment = objectMapper.readValue(shipmentState, Shipment.class);
-        Shipment newShipment = new Shipment(shipment.getShipmentId(), status);
+        Shipment newShipment = new Shipment();
+        newShipment.setShipmentId(shipment.getShipmentId());
+        newShipment.setStatus(new StatusWithTimestamp(status, LocalDateTime.now()));
+        newShipment.setCoordinates(coordinates);
 
         String newShipmentState = objectMapper.writeValueAsString(newShipment);
         stub.putStringState(shipmentId, newShipmentState);

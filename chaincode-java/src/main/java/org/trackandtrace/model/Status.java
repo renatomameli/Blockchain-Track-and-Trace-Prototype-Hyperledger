@@ -7,10 +7,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Status {
     CREATED ("Created"),
-    APPROVED("Approved"),
+    CUSTOMS_APPROVED("Approved"),
     PRE_CARRIAGE_START("Pre Carriage Start"),
     MAIN_CARRIAGE_START("Main Carriage Start"),
-    ON_CARRIAGE_START("On Carriage Start");
+    ON_CARRIAGE_START("On Carriage Start"),
+    DELIVERED("Delivered");
 
     private final String description;
 }
