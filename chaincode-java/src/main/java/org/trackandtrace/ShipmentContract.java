@@ -9,6 +9,7 @@ import org.hyperledger.fabric.contract.annotation.Default;
 import org.hyperledger.fabric.contract.annotation.Transaction;
 import org.hyperledger.fabric.shim.ChaincodeException;
 import org.hyperledger.fabric.shim.ChaincodeStub;
+import org.trackandtrace.model.Organization;
 import org.trackandtrace.model.Shipment;
 import org.trackandtrace.model.Status;
 import org.trackandtrace.model.StatusWithTimestamp;
@@ -23,6 +24,10 @@ public class ShipmentContract implements ContractInterface {
 
     @Transaction(intent = Transaction.TYPE.SUBMIT)
     public void createShipment(Context ctx, String object, Date eta) {
+        if (this.getOrganization(ctx.getStub()) != Organization.CONSIGNOR) {
+            throw new ChaincodeException("Only the Consignor is authorized to create a shipment");
+        }
+
         String generatedId = UUID.randomUUID().toString();
         Shipment shipment = new Shipment();
         shipment.setObject(object);
@@ -46,6 +51,11 @@ public class ShipmentContract implements ContractInterface {
 
         ObjectMapper objectMapper = new ObjectMapper();
         Shipment shipment = objectMapper.readValue(shipmentState, Shipment.class);
+
+        if (!this.isSubmitterAuthorizedAndStatusValid(shipment.getStatus().getStatus(), status, this.getOrganization(stub))) {
+            throw new ChaincodeException("You are not authorized to update the status of the shipment");
+        }
+
         Shipment newShipment = new Shipment();
         newShipment.setShipmentId(shipment.getShipmentId());
         newShipment.setStatus(new StatusWithTimestamp(status, LocalDateTime.now()));
@@ -63,5 +73,22 @@ public class ShipmentContract implements ContractInterface {
             throw new ChaincodeException("Shipment not found");
         }
         return shipmentJSON;
+    }
+
+    private Organization getOrganization(ChaincodeStub stub) {
+        String submitterMspId = stub.getMspId();
+        return Organization.fromDescription(submitterMspId);
+    }
+
+    private boolean isSubmitterAuthorizedAndStatusValid(Status currentShipmentStatus, Status newStatus, Organization submitterOrg) {
+        if (currentShipmentStatus.getOrder() == submitterOrg.getOrder()) {
+            return currentShipmentStatus == newStatus;
+        }
+
+        if (currentShipmentStatus.getOrder() + 1 == submitterOrg.getOrder()) {
+            return currentShipmentStatus.getOrder() + 1 == newStatus.getOrder();
+        }
+
+        return false;
     }
 }
