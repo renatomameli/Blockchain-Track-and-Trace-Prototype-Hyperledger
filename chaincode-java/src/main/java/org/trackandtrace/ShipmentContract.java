@@ -1,7 +1,6 @@
 package org.trackandtrace;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hyperledger.fabric.contract.Context;
 import org.hyperledger.fabric.contract.ContractInterface;
 import org.hyperledger.fabric.contract.annotation.Contract;
@@ -49,8 +48,7 @@ public class ShipmentContract implements ContractInterface {
             throw new ChaincodeException(errorMessage, "Error");
         }
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        Shipment shipment = objectMapper.readValue(shipmentState, Shipment.class);
+        Shipment shipment = Shipment.fromJSON(shipmentState);
 
         if (!this.isSubmitterAuthorizedAndStatusValid(shipment.getStatus().getStatus(), status, this.getOrganization(stub))) {
             throw new ChaincodeException("You are not authorized to update the status of the shipment");
@@ -61,7 +59,7 @@ public class ShipmentContract implements ContractInterface {
         newShipment.setStatus(new StatusWithTimestamp(status, LocalDateTime.now()));
         newShipment.setCoordinates(coordinates);
 
-        String newShipmentState = objectMapper.writeValueAsString(newShipment);
+        String newShipmentState = newShipment.toJSON();
         stub.putStringState(shipmentId, newShipmentState);
     }
 
