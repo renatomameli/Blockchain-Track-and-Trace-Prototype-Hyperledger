@@ -1,6 +1,5 @@
 package org.trackandtrace;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.hyperledger.fabric.contract.Context;
 import org.hyperledger.fabric.contract.ContractInterface;
 import org.hyperledger.fabric.contract.annotation.Contract;
@@ -23,7 +22,7 @@ public class ShipmentContract implements ContractInterface {
 
     @Transaction(intent = Transaction.TYPE.SUBMIT)
     public void createShipment(Context ctx, String object, Date eta) {
-        if (this.getOrganization(ctx.getStub()) != Organization.CONSIGNOR) {
+        if (this.getOrganizationByStub(ctx.getStub()) != Organization.CONSIGNOR) {
             throw new ChaincodeException("Only the Consignor is authorized to create a shipment");
         }
 
@@ -37,7 +36,7 @@ public class ShipmentContract implements ContractInterface {
     }
 
     @Transaction(intent = Transaction.TYPE.SUBMIT)
-    public void updateShipment(final Context ctx, String shipmentId, Status status, String coordinates) throws JsonProcessingException {
+    public void updateShipment(final Context ctx, String shipmentId, Status status, String coordinates) {
         ChaincodeStub stub = ctx.getStub();
 
         String shipmentState = stub.getStringState(shipmentId);
@@ -50,7 +49,7 @@ public class ShipmentContract implements ContractInterface {
 
         Shipment shipment = Shipment.fromJSON(shipmentState);
 
-        if (!this.isSubmitterAuthorizedAndStatusValid(shipment.getStatus().getStatus(), status, this.getOrganization(stub))) {
+        if (!this.isSubmitterAuthorizedAndStatusValid(shipment.getStatus().getStatus(), status, this.getOrganizationByStub(stub))) {
             throw new ChaincodeException("You are not authorized to update the status of the shipment");
         }
 
@@ -63,17 +62,16 @@ public class ShipmentContract implements ContractInterface {
         stub.putStringState(shipmentId, newShipmentState);
     }
 
-
     @Transaction(intent = Transaction.TYPE.EVALUATE)
-    public String readShipment(Context ctx, String shipmentId) {
+    public Shipment readShipment(Context ctx, String shipmentId) {
         String shipmentJSON = ctx.getStub().getStringState(shipmentId);
         if (shipmentJSON == null || shipmentJSON.isEmpty()) {
             throw new ChaincodeException("Shipment not found");
         }
-        return shipmentJSON;
+        return Shipment.fromJSON(shipmentJSON);
     }
 
-    private Organization getOrganization(ChaincodeStub stub) {
+    private Organization getOrganizationByStub(ChaincodeStub stub) {
         String submitterMspId = stub.getMspId();
         return Organization.fromDescription(submitterMspId);
     }

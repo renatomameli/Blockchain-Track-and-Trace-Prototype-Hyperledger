@@ -12,6 +12,6 @@ import java.time.LocalDateTime;
 public class StatusWithTimestamp {
 
     private Status status;
-    private LocalDateTime localDateTime;
+    private LocalDateTime timestamp;
 
 }
