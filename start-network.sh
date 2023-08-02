@@ -46,7 +46,7 @@ docker exec -it peer0.maincarrier.trackandtrace.com peer channel join -b /tracka
 docker exec -it peer0.oncarriageshipper.trackandtrace.com peer channel join -b /trackandtracechannel.block
 docker exec -it peer0.customs.trackandtrace.com peer channel join -b /trackandtracechannel.block
 
-# Schritt 11: Verpacke and installiere den Chaincode
+# Schritt 10: Verpacke and installiere den Chaincode
 # docker exec -it peer0.consignor.trackandtrace.com peer lifecycle chaincode package mychaincode.tar.gz --path /etc/hyperledger/fabric/chaincode/ --lang java --label mychaincode_1
 
 # docker exec -it peer0.consignor.trackandtrace.com peer lifecycle chaincode install mychaincode.tar.gz
